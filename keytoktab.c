@@ -109,8 +109,7 @@ toktyp lex2tok(char * fplex)
     {
         if(strcmp(fplex, keywordtab[i].text) == 0) return keywordtab[i].token;
     }
-
-    return id;
+    return 0;
 }
 
 /**********************************************************************/
@@ -124,8 +123,6 @@ toktyp key2tok(char * fplex)
    }
    
    return id;
-   //keywordtab
-   
 }
 
 /**********************************************************************/

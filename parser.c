@@ -12,8 +12,8 @@
 /**********************************************************************/
 /* Other OBJECT's METHODS (IMPORTED)                                  */
 /**********************************************************************/
-/* #include "keytoktab.h"   */       /* when the keytoktab is added   */
-/* #include "lexer.h"       */       /* when the lexer     is added   */
+#include "keytoktab.h"         /* when the keytoktab is added   */
+#include "lexer.h"              /* when the lexer     is added   */
 /* #include "symtab.h"      */       /* when the symtab    is added   */
 /* #include "optab.h"       */       /* when the optab     is added   */
 
@@ -29,25 +29,27 @@ static int  is_parse_ok=1;
 /**********************************************************************/
 /* define tokens + keywords NB: remove this when keytoktab.h is added */
 /**********************************************************************/
-enum tvalues { program = 257, id, input, output, var, integer, begin, equals, numeric, end };
+//enum tvalues { program = 257, id, input, output, var, integer, begin, equals, numeric, end };
 /**********************************************************************/
 /* Simulate the token stream for a given program                      */
 /**********************************************************************/
-static int tokens[] = {program, id, '(', input, ',', output, ')', ';',
+/*static int tokens[] = {program, id, '(', input, ',', output, ')', ';',
                         var, id, ',', id, ',', id, ':', integer, ';',
                         begin,
-                        id, equals, id, '+', id, '*', numeric,
+                        id, assign, id, '+', id, '*', integer,
                         end, '.',
-                        '$' };
+                        '$' }; */
 
 /**********************************************************************/
 /*  Simulate the lexer -- get the next token from the buffer          */
 /**********************************************************************/
+/*
 static int pget_token()
 {  
    static int i=0;
    if (tokens[i] != '$') return tokens[i++]; else return '$';
    }
+*/
 
 /**********************************************************************/
 /*  PRIVATE METHODS for this OBJECT  (using "static" in C)            */
@@ -60,7 +62,7 @@ static void match(int t)
 {
    if(DEBUG) printf("\n --------In match expected: %4d, found: %4d",
                     t, lookahead);
-   if (lookahead == t) lookahead = pget_token();
+   if (lookahead == t) lookahead = get_token();
    else {
       is_parse_ok=0;
       printf("\n *** Unexpected Token: expected: %4d found: %4d (in match)",
@@ -140,9 +142,9 @@ static void stat_operand()
     if(lookahead == id)
     {
         match(id);
-    } else if (lookahead == numeric)
+    } else if (lookahead == integer)
     {
-        match(numeric);
+        match(integer);
     }
 }
 
@@ -183,9 +185,9 @@ static void stat()
     if(lookahead == id)
     {
         match(id);
-        if(lookahead == equals)
+        if(lookahead == assign)
         {
-            match(equals);
+            match(assign);
             stat_expr();
         }
     }
@@ -228,7 +230,7 @@ static void stat_part()
 int parser()
 {
    if (DEBUG) printf("\n *** In  parser");
-   lookahead = pget_token();       // get the first token
+   lookahead = get_token();       // get the first token
    program_header();               // call the first grammar rule
    var_post();                      // call second grammar rule
    stat_part();                     //Call to third grammar rule
