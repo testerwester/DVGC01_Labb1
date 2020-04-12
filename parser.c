@@ -14,13 +14,13 @@
 /**********************************************************************/
 #include "keytoktab.h"         /* when the keytoktab is added   */
 #include "lexer.h"              /* when the lexer     is added   */
-/* #include "symtab.h"      */       /* when the symtab    is added   */
+#include "symtab.h"             /* when the symtab    is added   */
 /* #include "optab.h"       */       /* when the optab     is added   */
 
 /**********************************************************************/
 /* OBJECT ATTRIBUTES FOR THIS OBJECT (C MODULE)                       */
 /**********************************************************************/
-#define DEBUG 1
+#define DEBUG 0
 static int  lookahead=0;
 static int  is_parse_ok=1;
 
@@ -77,7 +77,9 @@ static void match(int t)
 static void program_header()
 {
    if (DEBUG) printf("\n *** In  program_header");
-   match(program); match(id); match('('); match(input);
+   match(program); 
+   addp_name(get_lexeme()); match(id); //Adds program name to Symbol table
+   match('('); match(input);
    match(','); match(output); match(')'); match(';');
    }
 
@@ -85,13 +87,35 @@ static void program_header()
 //********************** VAR    ***************************************
 static void type()
 {
-    if(lookahead == integer) match(integer);
+
+    switch(lookahead){
+        case integer:
+            setv_type(integer);
+            match(integer);
+            break;
+
+        case real:
+            setv_type(real);
+            match(real);
+            break;
+
+        case boolean:
+            setv_type(boolean);
+            match(boolean);
+            break;
+        
+        default: 
+            match(integer);
+            break;
+    }
+
 }
 
 static void id_list()
 {
     if(lookahead == id)
     {
+        addv_name(get_lexeme());
         match(id);
         if(lookahead == ',')
         {
@@ -142,10 +166,7 @@ static void stat_operand()
     if(lookahead == id)
     {
         match(id);
-    } else if (lookahead == integer)
-    {
-        match(integer);
-    }
+    } else match(number);
 }
 
 static void stat_factor()
@@ -234,7 +255,9 @@ int parser()
    program_header();               // call the first grammar rule
    var_post();                      // call second grammar rule
    stat_part();                     //Call to third grammar rule
+   p_symtab();
    return is_parse_ok;             // status indicator
+   
    }
 
 /**********************************************************************/

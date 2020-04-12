@@ -57,8 +57,12 @@ static void get_prog()
 
 static void pbuffer()
 {   
-   printf("\n%s", buffer);
-   }
+    printf("\n____________________________________________________________");
+    printf("\n  THE PROGRAM TEXT");
+    printf("\n____________________________________________________________");
+    printf("\n%s", buffer);
+    printf("\n____________________________________________________________\n\n");
+}
 
 /**********************************************************************/
 /* Copy a character from the program buffer to the lexeme buffer      */
