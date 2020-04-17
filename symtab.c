@@ -119,7 +119,7 @@ void p_symtab()
     }
     printf("\n____________________________________________________________");
     printf("\n  STATIC STORAGE REQUIRED is %i BYTES", get_size(startp));
-    printf("\n____________________________________________________________\n\n");
+    printf("\n____________________________________________________________");
 }
 
 /**********************************************************************/
@@ -157,10 +157,10 @@ int find_name(char * fpname)
 /**********************************************************************/
 void setv_type(toktyp ftype) 
 {
-    int size;
+    int size = 0;
 
     if(ftype == integer || ftype == boolean) size = 4;
-    else size = 8;
+    else if (ftype == real) size = 8;
 
    for(int i = startp; i<numrows; i++)
    {
@@ -168,6 +168,7 @@ void setv_type(toktyp ftype)
        {
            set_type(i, ftype); //Sets an type for all variables that haven't been set in scope of program
            set_size(i, size); //Sets size based on variable type
+           
            set_size(startp, (get_size(startp) + size)); //Adds size to total size of program
 
            //Special case for first variable after program
@@ -186,7 +187,7 @@ void setv_type(toktyp ftype)
 toktyp get_ntype(char * fpname) 
 { 
     if(get_ref(fpname) != nfound) return get_type(get_ref(fpname));
-    else return nfound;
+    else return undef;
 }
 
 /**********************************************************************/

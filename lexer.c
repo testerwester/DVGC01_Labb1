@@ -11,8 +11,6 @@
 
 
 
-#include <unistd.h>
-
 /**********************************************************************/
 /* Other OBJECT's METHODS (IMPORTED)                                  */
 /**********************************************************************/
@@ -42,7 +40,7 @@ static int  plex  = 0;               /* current index lexeme  buffer  */
 
 static void get_prog()
 {
-    int i = 0;
+    int i = 0; 
     while((buffer[i]=fgetc(stdin))!=EOF)
     {
         i++;
@@ -61,7 +59,7 @@ static void pbuffer()
     printf("\n  THE PROGRAM TEXT");
     printf("\n____________________________________________________________");
     printf("\n%s", buffer);
-    printf("\n____________________________________________________________\n\n");
+    printf("\n____________________________________________________________");
 }
 
 /**********************************************************************/
@@ -91,6 +89,7 @@ int get_token()
     3. Numeric string: Begins with a number - Number
     4. Other strings: Begins with non-letter/number - Lex2Tok
     */
+
     if(pbuf == 0)
     {
         get_prog();
