@@ -123,7 +123,7 @@ void p_symtab()
 }
 
 /**********************************************************************/
-/*  Add a program name to the symbol table                            */
+/*  Add a program name to the mbol table                            */
 /**********************************************************************/
 void addp_name(char * fpname) 
 { 
